@@ -1,0 +1,44 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script>
+  var server = io.connect('http://localhost:8080');
+
+  var insertChatter = function(name) {
+    $('#chatters').append('<li>' + name + '</li>');
+  };
+
+  var insertMessage = function(message) {
+    $('#chat').append('<li>' + message + '</li>');
+  };
+
+  server.on('add chatter', function(name) {
+    insertChatter(name);
+  });
+
+  server.on('chat', function(message) {
+    insertMessage(message);
+  });
+
+  server.on('message', function(message) {
+    insertMessage(message);
+  });
+
+  var name = prompt("Please enter your name","Harry Potter");
+  server.emit('join', name);
+
+  var message = prompt("What do you want to say?");
+  server.emit('messages', message);
+
+</script>
+
+<h1> Chat </h1>
+
+Chatters
+<ul id="chatters">
+</ul>
+
+Chat Room
+<ul id="chat">
+</ul>
+
